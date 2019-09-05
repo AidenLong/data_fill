@@ -79,15 +79,16 @@ def vehicle_type_code_handle(x):
     if x == 'SV':
         return 3
 
-def return_array_can_be_predict(data, target):
-    data1 = [x for x in data]
-    print(data1)
-    print(len(data1))
-    result = [0] * len(data1)
-    index = data1.index(target)
-    if index >= 0:
-        result[index] = 1
-        return result
+def get_array_can_be_predict(data, target):
+    # print(len(data1))
+    result = [0] * len(data)
+    try:
+        index = data.index(target)
+        if index >= 0:
+            result[index] = 1
+    except ValueError:
+        print(target, " not in list")
+    return result
 
 if __name__ == '__main__':
     # print(distance_now_months(datetime.date(2018, 8, 4), "%Y-%m-%d"))

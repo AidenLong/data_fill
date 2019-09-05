@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<body>
+<head>
+    <meta charset="UTF-8">
+    <title>RedBook</title>
+</head>
+
+<div style="margin-left: 40%">
+    <div>
+        <h1>RV</h1>
+        <h2>Please fill in the form.</h2>
+    </div>
+    <div>
+        <form action="/message" method="post">
+            <p>上牌时间: <input type="text" name="register_time" value="2015-10" required/></p>
+            <p>行驶距离: <input type="text" name="mileage" value="30300" required/>公里</p>
+            <p>城市: <input type="text" name="city" value="北京" required/></p>
+            <p>品牌: <input type="text" name="make" value="BMW" required/></p>
+            <p>系列: <input type="text" name="family" value="525LI" required/></p>
+            <p>排量: <input type="text" name="engine" value="2"/>T</p>
+            <p>档位款式: <input type="text" name="gear0" value="自动"/>T</p>
+            <p>车辆款式: <input type="text" name="vehicle_type_code" value="PS"/>T</p>
+            <p>款式发布时间: <input type="text" name="publish_date" value="2014-3"/></p>
+            <p>新车价格: <input type="text" name="new_price" value="500000"/>元</p>
+            <input type="submit" value="查询价格"/>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,26 +1,29 @@
 # -*- coding:utf-8 -*-
 # 引入所需要的全部包
+import time
+
+from sklearn.exceptions import ConvergenceWarning
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import ElasticNetCV
 from sklearn.preprocessing import StandardScaler
-from sklearn.exceptions import DataConversionWarning
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import pandas as pd
-from pandas import DataFrame
-import time
-import warnings
 
 ## 设置字符集，防止中文乱码
 mpl.rcParams['font.sans-serif'] = [u'simHei']
 mpl.rcParams['axes.unicode_minus'] = False
 
 # 加载数据
+start = time.time()
 path = './data/result.xlsx'
 # 没有混合类型时通过low_memory=F调用更多内存，加快效率
 df = pd.read_excel(path)
 print(df.shape)
+end = time.time()
+print(end - start)
 
 # 获取前5行数据
 # print(df.head())
@@ -34,19 +37,13 @@ datas = new_df.dropna(axis=0, how='any')  # 只要有一个数据为空，就进
 
 
 # 获取x和y变量
-X = datas.iloc[:, 0:-1]
+X = datas.iloc[:, 1:-1]
 Y = datas['REPRICE']
 
 '''
     对数据集进行测试集合训练集划分
-    X：特征矩阵（类型一般是DataFrame）
-    Y：特征矩阵对应的Label（类型一般是Series）
-    test_size：对X/Y进行划分的时候，测试集合的数据占比，是一个（0-1）之间的float类型的值
-    random_state：数据分割是基于随机器进行分割的,该参数给定随机数种子；
-        给一个值(int类型)的作用就是保证每次分割所产生的数数据集是完全相同的
 '''
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=1)
-
 # print(X_train.shape)
 # print(X_test.shape)
 # print(Y_train.shape)
@@ -54,19 +51,14 @@ X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_
 
 '''
     数据标准化
-    StandardScaler：将数据转换为标准差为1的数据集（有一个数据的映射）
-    如果一个API名字有fit，那么就有模型训练的含义
-    如果一个API名字中有transform， 那么就表示对数据具有转换的含义操作
     如果一个API名字中有predict，那么就表示进行数据预测，会有一个预测结果输出
 '''
-# ss = StandardScaler()
-# X_train = ss.fit_transform(X_train)  # 训练并转换
-# X_test = ss.transform(X_test)  # 直接使用在模型构建数据上进行一个数据标准化操作
-#
-# print(pd.DataFrame(X_test).describe().T)
+ss = StandardScaler()
+X_train = ss.fit_transform(X_train)  # 训练并转换
+X_test = ss.transform(X_test)  # 直接使用在模型构建数据上进行一个数据标准化操作
 
 # 模型训练
-lr = LinearRegression()
+lr = ElasticNetCV(alphas=np.logspace(0, 1, 10), l1_ratio=[.1, .5, .7, .9, .95, 1], fit_intercept=False)
 lr.fit(X_train, Y_train)  # 训练模型
 # 模型校验
 y_predict = lr.predict(X_test)  # 预测结果
@@ -78,21 +70,10 @@ rmse = np.sqrt(mse)
 print('rmse', rmse)
 
 ## 模型保存/持久化
-# 在机器学习部署的时候，实际上其中一种方式就是将模型进行输出；另外一种方式就是直接将预测结果输出
-# 模型输出一般是将模型输出到磁盘文件
 from sklearn.externals import joblib
 
-# joblib.dump(ss, 'data_ss.model')  # 将标准化模型保存
-joblib.dump(lr, './model/data_lr.model')  # 将模型保存
-
-# ss = joblib.load('data_ss.model')
-lr = joblib.load('./model/data_lr.model')
-
-# 使用加载的模型进行预测
-# data1 = [[2006, 12, 17, 12, 25, 0]]
-# data1 = ss.transform(data1)
-# print(data1)
-# print(lr.predict(data1))
+# joblib.dump(ss, './model/lr/data_ss.model')  # 将标准化模型保存
+joblib.dump(lr, './model/lr/data_lr.model')  # 将模型保存
 
 ## 预测值和实际值画图比较
 t = np.arange(len(X_test))
@@ -100,6 +81,6 @@ plt.figure(facecolor='w')  # 建一个画布，facecolor是背景色
 plt.plot(t, Y_test, 'r-', linewidth=2, label='真实值')
 plt.plot(t, y_predict, 'g-', linewidth=1, label='预测值')
 plt.legend(loc='upper left')  # 显示图例，设置图例的位置
-plt.title("线性回归预测时间和功率之间的关系", fontsize=20)
+plt.title("线性回归预测真实值图", fontsize=20)
 plt.grid(b=True)  # 加网格
 plt.show()

@@ -22,8 +22,8 @@ names = ['comb', 'vehiclekey', 'gathertime', 'websource', 'registrationtime', 'g
          ]
 row_num, column_num = data.shape  # 数据共有多少行，多少列
 
-important_names = ['registrationtime', 'web_price', 'gear0', 'engine', 'business', 'age', 'mileage', 'monthly_mileage',
-                   'VehicleTypeCode', 'aa']
+important_names = ['gear0', 'engine', 'business', 'age', 'mileage', 'monthly_mileage',
+                   'NewPrice', 'VehicleTypeCode', 'aa']
 important_data = data[important_names]
 # print(important_data.describe())
 print(important_data.head())
@@ -33,10 +33,10 @@ print(important_data.head())
     缺失值排量如何填补的问题
 '''
 
-print('处理挂牌时间')
-# 挂牌时间处理为距离当前时间的月数
-important_data["registrationtime"] = important_data["registrationtime"].apply(
-    lambda x: pd.Series(data_utils.distance_now_months_by_date(x)))
+# print('处理挂牌时间')
+# # 挂牌时间处理为距离当前时间的月数
+# important_data["registrationtime"] = important_data["registrationtime"].apply(
+#     lambda x: pd.Series(data_utils.distance_now_months_by_date(x)))
 
 print('处理档位信息')
 # 档位方式（自动挡2，手动挡1）
@@ -51,10 +51,10 @@ important_data["business"] = important_data["business"].apply(
 # 排放标准
 # 缺失值补充
 print('处理排放标准')
-# data_utils.emission_value_fill(data)
-# 同义词替换
-# data["emission0"] = data["emission0"].apply(
-#     lambda x: pd.Series(data_utils.emission_handle(x)))
+    # data_utils.emission_value_fill(data)
+    # 同义词替换
+    # data["emission0"] = data["emission0"].apply(
+    #     lambda x: pd.Series(data_utils.emission_handle(x)))
 # one-hot处理
 emission0 = pd.get_dummies(data["emission0"])
 emission_keys = emission0.keys()
@@ -100,4 +100,4 @@ important_data["aa"] = important_data["aa"].apply(
 important_data['REPRICE'] = data['REPRICE']
 
 print('end, save to file....')
-important_data.to_excel('./data/result_city.xlsx', sheet_name='result')
+important_data.to_excel('./data/result.xlsx', sheet_name='result')
