@@ -1,9 +1,11 @@
 # -*- coding utf-8 -*- #
 
-from flask import Flask, render_template, request
-
 import time
 import threading
+import re
+
+from flask import Flask, render_template, request
+
 from rv import xgboost_predict
 from rv.logging_config import logger
 
@@ -21,8 +23,6 @@ try:
     import xml.etree.cElementTree as ET
 except ImportError:
     import xml.etree.ElementTree as ET
-
-import re
 
 zhPattern = re.compile(u'[\u4e00-\u9fa5]+')
 

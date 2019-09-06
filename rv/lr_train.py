@@ -2,15 +2,17 @@
 # 引入所需要的全部包
 import time
 
+import numpy as np
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import pandas as pd
 from sklearn.exceptions import ConvergenceWarning
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import ElasticNetCV
 from sklearn.preprocessing import StandardScaler
-import numpy as np
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-import pandas as pd
+## 模型保存/持久化
+from sklearn.externals import joblib
 
 ## 设置字符集，防止中文乱码
 mpl.rcParams['font.sans-serif'] = [u'simHei']
@@ -68,9 +70,6 @@ print('测试R2：', lr.score(X_test, Y_test))
 mse = np.average((y_predict - Y_test) ** 2)
 rmse = np.sqrt(mse)
 print('rmse', rmse)
-
-## 模型保存/持久化
-from sklearn.externals import joblib
 
 # joblib.dump(ss, './model/lr/data_ss.model')  # 将标准化模型保存
 joblib.dump(lr, './model/lr/data_lr.model')  # 将模型保存

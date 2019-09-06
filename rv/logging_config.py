@@ -23,10 +23,9 @@ class Logger:
         self.logger.addHandler(fh)
 
 logger = Logger().logger
-# if __name__ == '__main__':
-#     logyyx = Logger().logger
-#     logyyx.debug('一个debug信息')
-#     logyyx.info('一个info信息')
-#     logyyx.warning('一个warning信息')
-#     logyyx.error('一个error信息')
-#     logyyx.critical('一个致命critical信息')
+if __name__ == '__main__':
+    logger.debug('一个debug信息')
+    logger.info('一个info信息')
+    logger.warning('一个warning信息')
+    logger.error('一个error信息')
+    logger.critical('一个致命critical信息')

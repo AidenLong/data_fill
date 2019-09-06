@@ -1,8 +1,8 @@
 # -*- coding utf-8 -*- #
 
-from sklearn.externals import joblib
 import pickle
 from rv import data_utils
+from sklearn.externals import joblib
 
 with open('./data/keys/city_keys.pkl', 'rb') as file:
     city_keys = pickle.load(file)

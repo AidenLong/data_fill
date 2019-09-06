@@ -1,7 +1,7 @@
 # -*- coding utf-8 -*- #
 
-from sklearn.externals import joblib
 import pickle
+from sklearn.externals import joblib
 from rv import data_utils
 from rv.logging_config import logger
 
@@ -55,16 +55,14 @@ def predict(register_time, city, mileage, make, family, gear0='自动', engine=2
             float(engine),
             data_utils.business_handle(business),
             age, mileage_int, mileage_int / age,
-            int(new_price),
+            float(new_price),
             data_utils.vehicle_type_code_handle(vehicle_type_code),
             publish_date_value]
     data.extend(emission_feature)
     data.extend(province_feature)
     data.extend(make_code_feature)
     logger.debug(data)
-    # print(len(data))
     data1 = [data]
-    # data1 = ss.transform(data1)
     price = xgb.predict(data1, validate_features=False)
     logger.debug('返回结果:' + str(price))
     return price[0]
