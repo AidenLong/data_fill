@@ -3,9 +3,7 @@
 from sklearn.externals import joblib
 import pickle
 from rv import data_utils
-from rv import logging_config
-
-logger = logging_config.Logger()
+from rv.logging_config import logger
 
 with open('./data/keys/city_keys.pkl', 'rb') as file:
     city_keys = pickle.load(file)
@@ -21,8 +19,6 @@ with open('./data/keys/makeCode_familyCode_keys.pkl', 'rb') as file:
     makeCode_familyCode_keys = pickle.load(file)
     makeCode_familyCode_keys = [x for x in makeCode_familyCode_keys]
     logger.debug(makeCode_familyCode_keys)
-
-
 
 xgb = joblib.load('./model/xgboost/data_xgboost.model')
 
@@ -43,7 +39,10 @@ def predict(register_time, city, mileage, make, family, gear0='自动', engine=2
         排放标准        国五
         品牌和系列code alfagiulia
     '''
-    logger.debug('查询参数', gear0, engine, business, register_time, mileage, new_price, vehicle_type_code, publish_date, city, make, family)
+    params = {'gear0': gear0, 'engine': engine, 'business': business, 'register_time': register_time,
+              'mileage': mileage, 'new_price': new_price, 'vehicle_type_code': vehicle_type_code,
+              'publish_date': publish_date, 'city': city, 'make': make, 'family': family}
+    logger.debug(params)
     mileage_int = int(mileage)
     publish_date_value = data_utils.distance_now_months_by_str(publish_date, patten='%Y-%m')
     emission_feature = data_utils.get_array_can_be_predict(emission_keys, '国五')
@@ -62,12 +61,12 @@ def predict(register_time, city, mileage, make, family, gear0='自动', engine=2
     data.extend(emission_feature)
     data.extend(province_feature)
     data.extend(make_code_feature)
-    print('模型需要数据', data)
+    logger.debug(data)
     # print(len(data))
     data1 = [data]
     # data1 = ss.transform(data1)
     price = xgb.predict(data1, validate_features=False)
-    print('返回结果:', price)
+    logger.debug('返回结果:' + str(price))
     return price[0]
 
 

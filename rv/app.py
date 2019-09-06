@@ -1,14 +1,11 @@
 # -*- coding utf-8 -*- #
 
-from flask import Flask, render_template, request, make_response
-from flask import jsonify
+from flask import Flask, render_template, request
 
 import time
 import threading
-from rv import lr_predict
-from rv import xgboost_predict, logging_config
-
-logger = logging_config.Logger()
+from rv import xgboost_predict
+from rv.logging_config import logger
 
 
 def heartbeat():

@@ -1,6 +1,6 @@
 # -*- coding utf-8 -*- #
 
-import logging, os
+import logging
 
 
 class Logger:
@@ -8,7 +8,9 @@ class Logger:
     def __init__(self, path='./logger/debug.log', clevel=logging.DEBUG, Flevel=logging.DEBUG):
         self.logger = logging.getLogger(path)
         self.logger.setLevel(logging.DEBUG)
-        fmt = logging.Formatter('[%(asctime)s] [%(levelname)s] %(message)s', '%Y-%m-%d %H:%M:%S')
+        # fmt = logging.Formatter('[%(asctime)s] [%(levelname)s] %(message)s', '%Y-%m-%d %H:%M:%S')
+        fmt = logging.Formatter("%(asctime)s %(filename)s %(funcName)s %(lineno)s \
+              %(levelname)s - %(message)s", "%Y-%m-%d %H:%M:%S")
         # 设置CMD日志
         sh = logging.StreamHandler()
         sh.setFormatter(fmt)
@@ -20,26 +22,11 @@ class Logger:
         self.logger.addHandler(sh)
         self.logger.addHandler(fh)
 
-    def debug(self, message):
-        self.logger.debug(message)
-
-    def info(self, message):
-        self.logger.info(message)
-
-    def war(self, message):
-        self.logger.warn(message)
-
-    def error(self, message):
-        self.logger.error(message)
-
-    def cri(self, message):
-        self.logger.critical(message)
-
-
-if __name__ == '__main__':
-    logyyx = Logger()
-    logyyx.debug('一个debug信息')
-    logyyx.info('一个info信息')
-    logyyx.war('一个warning信息')
-    logyyx.error('一个error信息')
-    logyyx.cri('一个致命critical信息')
+logger = Logger().logger
+# if __name__ == '__main__':
+#     logyyx = Logger().logger
+#     logyyx.debug('一个debug信息')
+#     logyyx.info('一个info信息')
+#     logyyx.warning('一个warning信息')
+#     logyyx.error('一个error信息')
+#     logyyx.critical('一个致命critical信息')
