@@ -3,21 +3,24 @@
 from sklearn.externals import joblib
 import pickle
 from rv import data_utils
+from rv import logging_config
+
+logger = logging_config.Logger()
 
 with open('./data/keys/city_keys.pkl', 'rb') as file:
     city_keys = pickle.load(file)
     city_keys = [x for x in city_keys]
-    print(city_keys)
+    logger.debug(city_keys)
 
 with open('./data/keys/emission_keys.pkl', 'rb') as file:
     emission_keys = pickle.load(file)
     emission_keys = [x for x in emission_keys]
-    print(emission_keys)
+    logger.debug(emission_keys)
 
 with open('./data/keys/makeCode_familyCode_keys.pkl', 'rb') as file:
     makeCode_familyCode_keys = pickle.load(file)
     makeCode_familyCode_keys = [x for x in makeCode_familyCode_keys]
-    print(makeCode_familyCode_keys)
+    logger.debug(makeCode_familyCode_keys)
 
 
 
@@ -40,7 +43,7 @@ def predict(register_time, city, mileage, make, family, gear0='自动', engine=2
         排放标准        国五
         品牌和系列code alfagiulia
     '''
-    print('查询参数', gear0, engine, business, register_time, mileage, new_price, vehicle_type_code, publish_date, city, make, family)
+    logger.debug('查询参数', gear0, engine, business, register_time, mileage, new_price, vehicle_type_code, publish_date, city, make, family)
     mileage_int = int(mileage)
     publish_date_value = data_utils.distance_now_months_by_str(publish_date, patten='%Y-%m')
     emission_feature = data_utils.get_array_can_be_predict(emission_keys, '国五')

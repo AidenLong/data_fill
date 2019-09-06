@@ -6,11 +6,13 @@ from flask import jsonify
 import time
 import threading
 from rv import lr_predict
-from rv import xgboost_predict
+from rv import xgboost_predict, logging_config
+
+logger = logging_config.Logger()
 
 
 def heartbeat():
-    print(time.strftime('%Y-%m-%d %H:%M:%S - heartbeat', time.localtime(time.time())))
+    logger.info(time.strftime('%Y-%m-%d %H:%M:%S - heartbeat', time.localtime(time.time())))
     timer = threading.Timer(60, heartbeat)
     timer.start()
 
